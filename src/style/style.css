@@ -1,0 +1,51 @@
+.team-wrapper{
+    border-style: groove;
+    border-width: 1px;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-top: 6%;
+}
+
+.dropdown-team{
+    /* position: relative;
+    bottom: 50px; */
+}
+.filter-button{
+    position: relative;
+    top: -25px;
+    left: 34px;
+}
+.filter-row{
+   margin-top:3%;
+}
+.select-team-btn, .year-button ,.show-btn{
+    color: #000000;
+    background-color: #ffffff;
+}
+
+.select-team-btn:hover, .year-button:hover ,.show-btn :hover{
+    color: #000000;
+    background-color: rgb(221, 221, 221);
+}
+.mod-cont{
+    position: absolute;
+}
+#modal-table-body input{
+    border-style: none;
+}
+.table td, .table th {
+    min-width: 10px;
+    max-width: 103px;
+}
+.table td input {
+    max-width: 100%;
+}
+.team-name{
+    text-align: center;
+}
+.header-name{
+    background-color: #e8e7e7
+}
+.content-to-clone{
+    margin-top: 5%;
+}
