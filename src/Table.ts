@@ -46,7 +46,7 @@ export class Table {
                     td.innerHTML = "0%"
                 }
                 else {
-                    td.innerHTML = (val.reduce((a, b) => a + b, 0)) / val.length + "%";
+                    td.innerHTML = ((val.reduce((a, b) => a + b, 0)) / val.length).toFixed(2) + "%";
                 }
             })
         }
