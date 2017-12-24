@@ -14,28 +14,61 @@ export class Table {
     };
 
     public generateTable() {
-        let table = $("#content-to-clone").clone().attr({ style: "display:block", id: "" }).appendTo($("#table-clone-in"));
-        table.find("p").html(this.data.teamMember.name);
+        let table = $("#content-to-clone").clone().attr({ style: "display:block", id: this.data.team.id }).appendTo($("#table-clone-in"));
+        table.find("p").html(this.data.team.name);
         let tableBody = table.find('tbody')[0];
-        for (let records in this.data) {
-            if (records !== "teamMember") {
-                this.createRow(this.data[records], tableBody);
+        this.data.members["Total"] = [];
+        for (let record in this.data.members) {
+            if (record !== "Total") {
+                let tableRow = ($("<tr />").append($("<td />", { "text": this.data.members[record].employee.name })));
+                tableBody.appendChild(this.createRow(this.data.members[record], tableRow[0], this.data.team));
+            }
+            else {
+                let tableRow = ($("<tr />").append($("<td />", { "text": record })));
+                this.createTotalRow(tableRow[0], this.data.team);
+                tableBody.appendChild(tableRow[0]);
             }
         }
     }
+    private createTotalRow(totalRow: HTMLElement, teamData: any) {
+        for (let i = 0; i <= 11; i++) {
+            let td = document.createElement("td");
+            let idtowatch = "." + teamData.name + teamData.id + "-" + i;
+            totalRow.appendChild(td);
+            $(idtowatch).on("change", (event) => {
+                var val = $(idtowatch).map(function (elem, is) {
+                    let floatNum = parseFloat(($(this).val()).slice(0, -1));
+                    if (!isNaN(floatNum)) {
+                        return (floatNum);
+                    }
+                }).get();
+                if (val.length === 0) {
+                    td.innerHTML = "0%"
+                }
+                else {
+                    td.innerHTML = (val.reduce((a, b) => a + b, 0)) / val.length + "%";
+                }
+            })
+        }
+    }
 
-    private createRow(employeeProjects: { data: any, employee: any }, table: HTMLElement) {
-        let tableRow = ($("<tr />").append($("<td />", { "text": employeeProjects.employee.name })));
+    private createRow(employeeProjects: { data: any, employee: any }, tableRow: HTMLElement, team: any) {
+
         for (let i = 0; i <= 11; i++) {
             let monthWeeks = Table.getMondays(this.year, i);
             let monthTd = document.createElement("td");
-            tableRow.append(monthTd);
+            let inputTd = document.createElement("input");
+            inputTd.setAttribute("class", team.name + team.id + "-" + i);
+            monthTd.appendChild(inputTd);
+            tableRow.appendChild(monthTd);
             this.getMonthDataOfUser(monthWeeks, employeeProjects).then((monthUserData: any) => {
-                this.generateEventListiner(monthTd, monthUserData);
-                monthTd.innerText = monthUserData.monthPrecentage;
+                this.generateEventListiner(inputTd, monthUserData);
+                inputTd.value = monthUserData.monthPrecentage;
+                var event = new Event('change');
+                inputTd.dispatchEvent(event);
             });
         }
-        table.appendChild(tableRow[0]);
+        return tableRow;
     }
 
     private getMonthDataOfUser(monthWeeks: string[], employeeProjectsData: any) {
@@ -43,14 +76,10 @@ export class Table {
         return new Promise((resolve: any, reject: any) => {
             let firstMondays = monthWeeks.slice();
             this.database.getAvailables(firstMondays, employee.id).then((availablesWeeks: any[]) => {
-
                 let monthAvailability = 0;
                 let spentTimeByWeek = 0;
-
                 availablesWeeks.forEach((availableWeekData) => {
-
                     monthAvailability = monthAvailability + availableWeekData.available;
-
                 });
                 employeeProjectsData.data.forEach((element: any) => {
                     availablesWeeks.forEach((availableWeekData) => {
@@ -59,7 +88,6 @@ export class Table {
                         }
                     })
                 });
-
                 let data = {
                     monthPrecentage: "-",
                     monthWeeks: availablesWeeks,
@@ -71,14 +99,16 @@ export class Table {
                     data.monthPrecentage = (parseFloat(num.toString()).toFixed(2)) + "%";
                 }
                 resolve(data);
-
             });
         });
     }
 
     private generateEventListiner(tdHtmlElement: HTMLElement, data: any) {
         tdHtmlElement.addEventListener("click", (event) => {
-
+            $('#modalLabel').empty();
+            let year = new Date(data.month[0]).getFullYear();
+            let month = new Date(data.month[0]).toLocaleString("en-us", {month: "long"});
+            $('#modalLabel').text(month + " " + year + " " + "( " + data.employeeProjectsData.employee.name + " )");
             this.createModalTable(data, tdHtmlElement);
             $("#UserModal").modal();
         });
@@ -97,7 +127,6 @@ export class Table {
         availableNameTd.innerText = "Available";
         availableRow.appendChild(availableNameTd);
         data.monthWeeks.forEach(element => {
-
             let availableNameTd = document.createElement("td");
             let avlbInput = document.createElement("input");
             avlbInput.value = element.available;
@@ -115,36 +144,28 @@ export class Table {
         for (let key in projectRecords) {
             let projectRow = document.createElement("tr");
             let projectNameTd = document.createElement("td");
-
             projectNameTd.innerText = key;
             projectRow.appendChild(projectNameTd);
-
             data.monthWeeks.forEach(weekAvlb => {
                 this.database.getWeekProjectData(data.employeeProjectsData.employee.id, projectRecords[key], weekAvlb.week).then((proj) => {
-
-
                     let projectTd = document.createElement("td");
                     let projectInput = document.createElement("input");
                     projectInput.value = proj.spent;
                     projectTd.appendChild(projectInput);
                     projectRow.appendChild(projectTd);
-
                     projectInput.addEventListener("change", (event) => {
                         let addData = Object.assign({}, proj);
                         addData.spent = parseInt(event.target.value);
                         addData.week = weekAvlb.week;
                         this.projectsToSave.push(addData);
                     });
-
                 });
-
             });
             $('#modal-table-body').append(projectRow);
         }
     }
     private prepareProjectsByWeeks(projects: any[]): any[] {
         let uniqueProjects: any = {};
-
         projects.forEach((project) => {
             if (!uniqueProjects.hasOwnProperty(project.projectName)) {
                 uniqueProjects[project.projectName] = {
@@ -183,7 +204,6 @@ export class Table {
         }
         return mondays;
     }
-
     private saveData(monthTd: HTMLElement, monthWeeks: string[], employeeProjectsData: any) {
         if (this.projectsToSave.length > 0 || this.availablesTOSave.length > 0) {
             this.database.saveAvailableData(this.availablesTOSave).then((feedback) => {
@@ -195,15 +215,13 @@ export class Table {
                         }
                         this.getMonthDataOfUser(monthWeeks, passData).then((monthData) => {
                             this.generateEventListiner(monthTd, monthData);
-                            monthTd.innerText = monthData.monthPrecentage;
+                            monthTd.value = monthData.monthPrecentage;
+                            let event = new Event('change');
+                            monthTd.dispatchEvent(event);
                         })
                     })
                 })
             });
-
-
-
         }
-
     }
 }

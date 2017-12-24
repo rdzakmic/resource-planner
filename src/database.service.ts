@@ -221,7 +221,7 @@ export class DataFetcher {
                             projectId: project.projectId,
                             projectName: project.projectName,
                             week: week,
-                            year: "2017",
+                            year: new Date(week).getFullYear(),
                             spent: 0
                         });
                     }
@@ -314,7 +314,6 @@ export class DataFetcher {
             this.openRequest.onsuccess = (event: any) => {
                 let db = event.target.result;
                 let objectStore = db.transaction(["Availables"], "readwrite").objectStore("Availables");
-                // var index = objectStore.index("memberWeek");
                 objectStore.openCursor().onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {

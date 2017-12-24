@@ -4,7 +4,6 @@
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="src/style/style.css">
-
   <title></title>
 </head>
 
@@ -13,54 +12,46 @@
   <div class="container">
 
     <!--TEAM members -->
+    <button class="btn btn-default filter-button">
+      <span class="plus-sign">+</span>
+      <span class="minus-sign" style="display:none">-</span>
+      Filter
+    </button>
     <div class="row team-wrapper">
-     
-        <div class="col-sm-2">
-          <button class="btn btn-default filter-button">Filter
-            <span>-</span>
-          </button>
-        </div>
-      
-   
-        <div class="row filter-row">
-          <div class="col-sm-5">
-            <div class="dropdown dropdown-team">
-              <button class="btn btn-secondary dropdown-toggle select-team-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Select Team
-              </button>
-              <div id="dropdown-team" class="dropdown-menu"></div>
+      <div class="filter-row row" style="display:none">
+        <div class="col-sm-5">
+          <div class="dropdown dropdown-team">
+            <button class="btn btn-secondary dropdown-toggle select-team-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Select Team
+            </button>
+            <div id="dropdown-team" class="dropdown-menu"></div>
 
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle year-button" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Year
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">2016</a>
-                <a class="dropdown-item" href="#">2017</a>
-                <a class="dropdown-item" href="#">2018</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-1">
-            <button id="show-table" type="button" class="btn btn-secondary show-btn">Show</button>
           </div>
         </div>
-      
+        <div class="col-sm-4">
+          <div class="form-group">
+            <select class="form-control" id="year">
+              <option value="2017">2017</option>
+              <option value="2016">2016</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-1">
+          <button id="show-table" type="button" class="btn btn-secondary show-btn">Show</button>
+        </div>
+      </div>
+
     </div>
     <div class="row" id="table-clone-in">
     </div>
     <div class="col-sm-12 content-to-clone" id="content-to-clone" style="display:none">
-    
+
       <div class="header-name">
         <p class="team-name"></p>
       </div>
-      <table class="table table-striped table-bordered">
-        <thead>
+      <table class="table table-striped table-bordered team-table">
+        <thead class="header-elm">
           <th scope="col">Name</th>
           <th scope="col">Jan</th>
           <th scope="col">Feb</th>
@@ -78,14 +69,14 @@
         <tbody id="employees-table">
         </tbody>
       </table>
-    
+
     </div>
 
     <div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content mod-cont">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="modalLabel">Modal title</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -96,12 +87,12 @@
                 <tr id="modal-table-head">
                 </tr>
               </thead>
-              <tbody id="modal-table-body">
+              <tbody class="modal-body-input" id="modal-table-body">
               </tbody>
             </table>
           </div>
           <div class="modal-footer">
-            <button id="save-btn" type="button" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+            <button id="save-btn" type="button" data-dismiss="modal" class="btn btn-primary save-change">Save</button>
           </div>
         </div>
       </div>

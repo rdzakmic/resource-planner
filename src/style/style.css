@@ -11,12 +11,14 @@
     bottom: 50px; */
 }
 .filter-button{
-    position: relative;
-    top: -25px;
-    left: 34px;
+    position: absolute;
+    top: 46px;
+    border: 1px solid gray
 }
 .filter-row{
    margin-top:3%;
+   width: 48%;
+   margin-left: 0%;
 }
 .select-team-btn, .year-button ,.show-btn{
     color: #000000;
@@ -42,10 +44,39 @@
 }
 .team-name{
     text-align: center;
+    margin-bottom: 0%;  
 }
 .header-name{
     background-color: #e8e7e7
 }
 .content-to-clone{
     margin-top: 5%;
+    padding: 0%;
+}
+
+.team-table td {
+    padding: 0px;
+    max-width: 55px;
+    padding-left: 1%;
+    text-align: center
+    
+}
+.team-table input{
+    background-color: inherit;
+    border-style: none;
+    text-align: center
+}
+.modal-body-input input{
+    background-color: inherit;
+    border-style: none;
+}
+
+.header-elm th{
+    padding: 0%;
+    text-align: center;
+}
+.save-change{
+    background-color: #f2f2f2;
+    color: #000;
+    border-color: #aba8a8;
 }
